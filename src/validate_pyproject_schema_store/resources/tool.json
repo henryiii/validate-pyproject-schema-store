@@ -1,0 +1,10 @@
+{
+  "cibuildwheel": "https://json.schemastore.org/partial-cibuildwheel.json",
+  "mypy": "https://json.schemastore.org/partial-mypy.json",
+  "ruff": "https://json.schemastore.org/ruff.json",
+  "hatch": "https://json.schemastore.org/hatch.json",
+  "scikit-build": "https://json.schemastore.org/partial-scikit-build.json",
+  "setuptools": "https://json.schemastore.org/partial-setuptools.json",
+  "poetry": "https://json.schemastore.org/partial-poetry.json",
+  "pdm": "https://json.schemastore.org/partial-pdm.json"
+}
