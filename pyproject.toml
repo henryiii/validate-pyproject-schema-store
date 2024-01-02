@@ -1,0 +1,186 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+
+[project]
+name = "validate-pyproject-schema-store"
+version = "2024.01.02"
+authors = [
+  { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
+]
+description = "A plugin set for validate-pyproject and schema-store."
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 1 - Planning",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering",
+  "Typing :: Typed",
+]
+dependencies = [
+  "importlib_resources; python_version<'3.9'",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest >=6",
+  "pytest-cov >=3",
+]
+docs = [
+  "sphinx>=7.0",
+  "myst_parser>=0.13",
+  "sphinx_copybutton",
+  "sphinx_autodoc_typehints",
+  "furo>=2023.08.17",
+]
+validate-pyproject = [
+  "validate-pyproject",
+]
+all = [
+  "validate-pyproject[all]",
+]
+
+[project.urls]
+Homepage = "https://github.com/henryiii/validate-pyproject-schema-store"
+"Bug Tracker" = "https://github.com/henryiii/validate-pyproject-schema-store/issues"
+Discussions = "https://github.com/henryiii/validate-pyproject-schema-store/discussions"
+Changelog = "https://github.com/henryiii/validate-pyproject-schema-store/releases"
+
+[project.entry-points."validate_pyproject.tool_schema"]
+cibuildwheel = "validate_pyproject_schema_store.schema:get_schema"
+mypy = "validate_pyproject_schema_store.schema:get_schema"
+ruff = "validate_pyproject_schema_store.schema:get_schema"
+hatch = "validate_pyproject_schema_store.schema:get_schema"
+scikit-build = "validate_pyproject_schema_store.schema:get_schema"
+poetry = "validate_pyproject_schema_store.schema:get_schema"
+pdm = "validate_pyproject_schema_store.schema:get_schema"
+
+[project.entry-points."pipx.run"]
+validate-pyproject-schema-store = "validate_pyproject.cli:main"
+
+[tool.hatch.envs.default]
+features = ["test"]
+dependencies = ["aiohttp", "tomlkit", "validate-pyproject"]
+scripts.test = "pytest {args}"
+scripts.sync = "python tools/sync.py {args}"
+
+[tool.hatch.envs.docs]
+features = ["docs"]
+dependencies = ["sphinx-autobuild"]
+scripts.linkcheck = "sphinx-build -b linkcheck docs docs/_build/linkcheck {args}"
+scripts.build = "sphinx-build --keep-going -n -T -b=html docs docs/_build/html {args}"
+scripts.serve = "sphinx-autobuild -n -T -b=html docs docs/_build/html {args}"
+scripts.build-api-docs = "sphinx-apidoc -o docs/api/ --module-first --no-toc --force src/validate_pyproject_schema_store {args}"
+
+[tool.hatch.envs.lint]
+requirements = ["pre-commit"]
+skip-install = true
+scripts.lint = "pre-commit run --all-files --show-diff-on-failures {args}"
+
+[tool.hatch.envs.pylint]
+requirements = ["pylint"]
+scripts.lint = "pylint validate_pyproject_schema_store {args}"
+
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+xfail_strict = true
+filterwarnings = [
+  "error",
+]
+log_cli_level = "INFO"
+testpaths = [
+  "tests",
+]
+
+
+[tool.coverage]
+run.source = ["validate_pyproject_schema_store"]
+port.exclude_lines = [
+  'pragma: no cover',
+  '\.\.\.',
+  'if typing.TYPE_CHECKING:',
+]
+
+[tool.mypy]
+files = ["src", "tests", "tools"]
+python_version = "3.11"
+warn_unused_configs = true
+strict = true
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+warn_unreachable = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+[[tool.mypy.overrides]]
+module = "validate_pyproject_schema_store.*"
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+
+[tool.ruff]
+src = ["src"]
+
+[tool.ruff.lint]
+extend-select = [
+  "B",           # flake8-bugbear
+  "I",           # isort
+  "ARG",         # flake8-unused-arguments
+  "C4",          # flake8-comprehensions
+  "EM",          # flake8-errmsg
+  "ISC",
+  "ICN",         # flake8-import-conventions
+  "G",           # flake8-logging-format
+  "PGH",         # pygrep-hooks
+  "PIE",         # flake8-pie
+  "PL",          # pylint
+  "PT",          # flake8-pytest-style
+  "PTH",         # flake8-use-pathlib
+  "RET",         # flake8-return
+  "RUF",         # Ruff-specific
+  "SIM",         # flake8-simplify
+  "T20",         # flake8-print
+  "UP",          # pyupgrade
+  "YTT",         # flake8-2020
+  "EXE",         # flake8-executable
+  "NPY",         # NumPy specific rules
+  "PD",          # pandas-vet
+]
+ignore = [
+  "PLR",    # Design related pylint codes
+#  "ISC001", # Conflicts with formatter
+]
+isort.required-imports = ["from __future__ import annotations"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["T20"]
+"tools/**" = ["T20"]
+
+
+[tool.pylint]
+py-version = "3.8"
+ignore-paths = [".*/_version.py"]
+reports.output-format = "colorized"
+similarities.ignore-imports = "yes"
+messages_control.disable = [
+  "design",
+  "fixme",
+  "line-too-long",
+  "missing-module-docstring",
+  "wrong-import-position",
+]
+
+[tool.repo-review]
+ignore = ["RTD", "PY004"]
