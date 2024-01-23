@@ -6,5 +6,6 @@
   "scikit-build": "https://json.schemastore.org/partial-scikit-build.json",
   "setuptools": "https://json.schemastore.org/partial-setuptools.json",
   "poetry": "https://json.schemastore.org/partial-poetry.json",
-  "pdm": "https://json.schemastore.org/partial-pdm.json"
+  "pdm": "https://json.schemastore.org/partial-pdm.json",
+  "pyright": "https://json.schemastore.org/partial-pyright.json"
 }
