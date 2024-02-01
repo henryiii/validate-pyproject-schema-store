@@ -1,4 +1,5 @@
 {
+  "black": "https://json.schemastore.org/partial-black.json",
   "cibuildwheel": "https://json.schemastore.org/partial-cibuildwheel.json",
   "mypy": "https://json.schemastore.org/partial-mypy.json",
   "ruff": "https://json.schemastore.org/ruff.json",

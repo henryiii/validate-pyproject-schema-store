@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2024.01.29"
+version = "2024.02.01"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
@@ -58,6 +58,7 @@ Discussions = "https://github.com/henryiii/validate-pyproject-schema-store/discu
 Changelog = "https://github.com/henryiii/validate-pyproject-schema-store/releases"
 
 [project.entry-points."validate_pyproject.tool_schema"]
+black = "validate_pyproject_schema_store.schema:get_schema"
 cibuildwheel = "validate_pyproject_schema_store.schema:get_schema"
 mypy = "validate_pyproject_schema_store.schema:get_schema"
 ruff = "validate_pyproject_schema_store.schema:get_schema"
