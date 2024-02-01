@@ -62,6 +62,7 @@ repos:
           - importlib_resources
           - tomlkit
           - aiohttp
+          - validate_pyproject
 
   - repo: https://github.com/codespell-project/codespell
     rev: "v2.2.6"

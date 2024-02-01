@@ -36,6 +36,7 @@ dependencies = [
 test = [
   "pytest >=6",
   "pytest-cov >=3",
+  "validate-pyproject>=0.16",
 ]
 docs = [
   "sphinx>=7.0",
@@ -72,8 +73,9 @@ pyright = "validate_pyproject_schema_store.schema:get_schema"
 validate-pyproject-schema-store = "validate_pyproject.cli:main"
 
 [tool.hatch.envs.default]
+path = ".venv"
 features = ["test"]
-dependencies = ["aiohttp", "tomlkit", "validate-pyproject"]
+dependencies = ["aiohttp", "tomlkit"]
 scripts.test = "pytest {args}"
 scripts.sync = "python tools/sync.py {args}"
 
