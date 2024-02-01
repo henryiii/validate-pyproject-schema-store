@@ -474,8 +474,8 @@
       "format": "uri"
     },
     "license": {
-      "$ref": "https://json.schemastore.org/base.json#/definitions/license",
-      "description": "License name."
+      "description": "License name.",
+      "type": "string"
     },
     "authors": {
       "$ref": "#/definitions/poetry-authors"
