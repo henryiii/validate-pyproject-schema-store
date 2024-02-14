@@ -56,16 +56,6 @@ async def main() -> None:
             target = RESOURCES / f"{tool}.schema.json"
             result = future.result()
 
-            # Hack for poetry having reference to another schema
-            # (until supported upstream)
-            license_sec = result.get("properties", {}).get("license", {})
-            if (
-                license_sec.get("$ref", "")
-                == "https://json.schemastore.org/base.json#/definitions/license"
-            ):
-                del license_sec["$ref"]
-                license_sec["type"] = "string"
-
             new = json.dumps(result, indent=2) + "\n"
             changed |= write_if_changed(target, new)
 

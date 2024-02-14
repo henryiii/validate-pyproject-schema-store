@@ -474,8 +474,8 @@
       "format": "uri"
     },
     "license": {
-      "description": "License name.",
-      "type": "string"
+      "type": "string",
+      "description": "License name."
     },
     "authors": {
       "$ref": "#/definitions/poetry-authors"
