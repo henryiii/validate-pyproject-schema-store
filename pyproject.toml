@@ -164,7 +164,7 @@ extend-select = [
 ]
 ignore = [
   "PLR",    # Design related pylint codes
-#  "ISC001", # Conflicts with formatter
+  "ISC001", # Conflicts with formatter
 ]
 isort.required-imports = ["from __future__ import annotations"]
 
