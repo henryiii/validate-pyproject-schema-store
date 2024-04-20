@@ -55,11 +55,16 @@ pre-commit automatically.
 
 ## Developing
 
-This project uses `hatch`. You can run the sync script on Python 3.11+ by
-running:
+This project uses `hatch`. You can run the sync script by running:
 
 ```bash
-hatch run sync
+hatch run tools/sync.py
+```
+
+You can validate itself by running:
+
+```bash
+hatch run self
 ```
 
 <!-- prettier-ignore-start -->
