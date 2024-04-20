@@ -37,6 +37,7 @@ test = [
   "pytest >=6",
   "pytest-cov >=3",
   "validate-pyproject>=0.16",
+  "tomli; python_version<'3.11'",
 ]
 docs = [
   "sphinx>=7.0",
