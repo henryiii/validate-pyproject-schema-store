@@ -20,11 +20,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Setup uv
+        uses: yezz123/setup-uv@v4
       - name: Install Hatch
-        run: pip install hatch
+        run:
+          uv pip install --system
+          git+https://github.com/pypa/hatch@d615fef0961393c32e14016a7fee162699c08aaf
       - name: Run bump script
         run: |
-          hatch run sync
+          hatch run tools/sync.py
           git status
           git diff
       - uses: peter-evans/create-pull-request@v6
