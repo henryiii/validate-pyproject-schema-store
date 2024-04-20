@@ -23,6 +23,7 @@ def test_vpp_loads(caplog):
         in caplog.text
     )
 
+
 def test__loads(caplog):
     pyproject_as_dict = tomllib.loads("""
         [tool.hatch.env]
