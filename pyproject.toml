@@ -47,10 +47,10 @@ docs = [
   "furo>=2023.08.17",
 ]
 validate-pyproject = [
-  "validate-pyproject>=0.16",
+  "validate-pyproject",
 ]
 all = [
-  "validate-pyproject[all]>=0.16",
+  "validate-pyproject[all]",
 ]
 
 [project.urls]
