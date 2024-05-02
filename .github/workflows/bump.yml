@@ -23,9 +23,7 @@ jobs:
       - name: Setup uv
         uses: yezz123/setup-uv@v4
       - name: Install Hatch
-        run:
-          uv pip install --system
-          git+https://github.com/pypa/hatch@d615fef0961393c32e14016a7fee162699c08aaf
+        run: uv pip install --system "hatch>=1.10"
       - name: Run bump script
         run: |
           hatch run tools/sync.py

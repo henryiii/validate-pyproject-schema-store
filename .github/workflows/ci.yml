@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [ubuntu-latest, macos-13, windows-latest]
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -41,9 +41,6 @@ jobs:
         uses: yezz123/setup-uv@v4
 
       - name: Install Hatch
-        run:
-          uv pip install --system
-          git+https://github.com/pypa/hatch@d615fef0961393c32e14016a7fee162699c08aaf
-
+        run: uv pip install --system "hatch>=1.10"
       - name: Test package
         run: hatch test -ca
