@@ -55,7 +55,7 @@ pre-commit automatically.
 
 ## Developing
 
-This project uses `hatch`. You can run the sync script by running:
+This project uses `hatch>=1.10`. You can run the sync script by running:
 
 ```bash
 hatch run tools/sync.py
