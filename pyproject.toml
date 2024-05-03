@@ -74,7 +74,7 @@ pyright = "validate_pyproject_schema_store.schema:get_schema"
 validate-pyproject-schema-store = "validate_pyproject.cli:main"
 
 [tool.hatch.envs.default]
-uv = true
+installer = "uv"
 
 [tool.hatch.envs.hatch-test]
 features = ["test"]
