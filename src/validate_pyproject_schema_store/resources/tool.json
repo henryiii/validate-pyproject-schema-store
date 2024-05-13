@@ -8,5 +8,6 @@
   "setuptools": "https://json.schemastore.org/partial-setuptools.json",
   "poetry": "https://json.schemastore.org/partial-poetry.json",
   "pdm": "https://json.schemastore.org/partial-pdm.json",
-  "pyright": "https://json.schemastore.org/partial-pyright.json"
+  "pyright": "https://json.schemastore.org/partial-pyright.json",
+  "uv": "https://json.schemastore.org/uv.json"
 }
