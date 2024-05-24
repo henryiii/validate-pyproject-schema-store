@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2024.05.20"
+version = "2024.05.24"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
