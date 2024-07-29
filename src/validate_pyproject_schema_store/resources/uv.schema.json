@@ -11,11 +11,142 @@
         "null"
       ]
     },
+    "compile-bytecode": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "config-settings": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ConfigSettings"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dev-dependencies": {
+      "description": "PEP 508-style requirements, e.g., `flask==3.0.0`, or `black @ https://...`.",
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "exclude-newer": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ExcludeNewer"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "extra-index-url": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/IndexUrl"
+      }
+    },
+    "find-links": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/FlatIndexLocation"
+      }
+    },
+    "index-strategy": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/IndexStrategy"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "index-url": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/IndexUrl"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "keyring-provider": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/KeyringProviderType"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "link-mode": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/LinkMode"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "managed": {
+      "description": "Whether the project is managed by `uv`. If `false`, `uv` will ignore the project when `uv run` is invoked.",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
     "native-tls": {
       "type": [
         "boolean",
         "null"
       ]
+    },
+    "no-binary": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "no-binary-package": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/PackageName"
+      }
+    },
+    "no-build": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "no-build-package": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/PackageName"
+      }
     },
     "no-cache": {
       "type": [
@@ -23,10 +154,42 @@
         "null"
       ]
     },
+    "no-index": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "offline": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "override-dependencies": {
+      "description": "PEP 508 style requirements, e.g. `flask==3.0.0`, or `black @ https://...`.",
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
     "pip": {
       "anyOf": [
         {
           "$ref": "#/definitions/PipOptions"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prerelease": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PreReleaseMode"
         },
         {
           "type": "null"
@@ -39,6 +202,51 @@
         "null"
       ]
     },
+    "python-fetch": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PythonFetch"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "python-preference": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PythonPreference"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "reinstall": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "reinstall-package": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/PackageName"
+      }
+    },
+    "resolution": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ResolutionMode"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "sources": {
       "type": [
         "object",
@@ -48,7 +256,23 @@
         "$ref": "#/definitions/Source"
       }
     },
+    "upgrade": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "upgrade-package": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/definitions/Requirement"
+      }
+    },
     "workspace": {
+      "description": "The workspace definition for the project, if any.",
       "anyOf": [
         {
           "$ref": "#/definitions/ToolUvWorkspace"
@@ -59,7 +283,6 @@
       ]
     }
   },
-  "additionalProperties": false,
   "definitions": {
     "AnnotationStyle": {
       "description": "Indicate the style of annotation comments, used to indicate the dependencies that requested each package.",
@@ -126,7 +349,7 @@
       "pattern": "^\\d{4}-\\d{2}-\\d{2}(T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2}))?$"
     },
     "ExtraName": {
-      "description": "The normalized name of an extra dependency group.\n\nConverts the name to lowercase and collapses runs of `-`, `_`, and `.` down to a single `-`. For example, `---`, `.`, and `__` are all converted to a single `-`.\n\nSee: - <https://peps.python.org/pep-0685/#specification/> - <https://packaging.python.org/en/latest/specifications/name-normalization/>",
+      "description": "The normalized name of an extra dependency.\n\nConverts the name to lowercase and collapses runs of `-`, `_`, and `.` down to a single `-`. For example, `---`, `.`, and `__` are all converted to a single `-`.\n\nSee: - <https://peps.python.org/pep-0685/#specification/> - <https://packaging.python.org/en/latest/specifications/name-normalization/>",
       "type": "string"
     },
     "FlatIndexLocation": {
@@ -227,6 +450,12 @@
             "null"
           ]
         },
+        "allow-empty-requirements": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
         "annotation-style": {
           "anyOf": [
             {
@@ -249,6 +478,30 @@
             "null"
           ]
         },
+        "concurrent-builds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 1.0
+        },
+        "concurrent-downloads": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 1.0
+        },
+        "concurrent-installs": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 1.0
+        },
         "config-settings": {
           "anyOf": [
             {
@@ -262,6 +515,12 @@
         "custom-compile-command": {
           "type": [
             "string",
+            "null"
+          ]
+        },
+        "emit-build-options": {
+          "type": [
+            "boolean",
             "null"
           ]
         },
@@ -438,7 +697,7 @@
             "null"
           ]
         },
-        "offline": {
+        "no-strip-markers": {
           "type": [
             "boolean",
             "null"
@@ -454,6 +713,12 @@
           }
         },
         "output-file": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "prefix": {
           "type": [
             "string",
             "null"
@@ -495,6 +760,21 @@
             }
           ]
         },
+        "reinstall": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "reinstall-package": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/PackageName"
+          }
+        },
         "require-hashes": {
           "type": [
             "boolean",
@@ -528,6 +808,27 @@
             "string",
             "null"
           ]
+        },
+        "universal": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "upgrade": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "upgrade-package": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/definitions/Requirement"
+          }
         }
       },
       "additionalProperties": false
@@ -571,10 +872,71 @@
         }
       ]
     },
+    "PythonFetch": {
+      "oneOf": [
+        {
+          "description": "Automatically fetch managed Python installations when needed.",
+          "type": "string",
+          "enum": [
+            "automatic"
+          ]
+        },
+        {
+          "description": "Do not automatically fetch managed Python installations; require explicit installation.",
+          "type": "string",
+          "enum": [
+            "manual"
+          ]
+        }
+      ]
+    },
+    "PythonPreference": {
+      "oneOf": [
+        {
+          "description": "Only use managed Python installations; never use system Python installations.",
+          "type": "string",
+          "enum": [
+            "only-managed"
+          ]
+        },
+        {
+          "description": "Prefer installed Python installations, only download managed Python installations if no system Python installation is found.\n\nInstalled managed Python installations are still preferred over system Python installations.",
+          "type": "string",
+          "enum": [
+            "installed"
+          ]
+        },
+        {
+          "description": "Prefer managed Python installations over system Python installations, even if fetching is required.",
+          "type": "string",
+          "enum": [
+            "managed"
+          ]
+        },
+        {
+          "description": "Prefer system Python installations over managed Python installations.\n\nIf a system Python installation cannot be found, a managed Python installation can be used.",
+          "type": "string",
+          "enum": [
+            "system"
+          ]
+        },
+        {
+          "description": "Only use system Python installations; never use managed Python installations.",
+          "type": "string",
+          "enum": [
+            "only-system"
+          ]
+        }
+      ]
+    },
     "PythonVersion": {
       "description": "A Python version specifier, e.g. `3.7` or `3.8.0`.",
       "type": "string",
       "pattern": "^3\\.\\d+(\\.\\d+)?$"
+    },
+    "Requirement": {
+      "description": "A PEP 508 dependency specifier",
+      "type": "string"
     },
     "ResolutionMode": {
       "oneOf": [
@@ -666,7 +1028,7 @@
           "additionalProperties": false
         },
         {
-          "description": "The path to a dependency, either a wheel (a `.whl` file), source distribution (a `.zip` or `.tag.gz` file), or source tree (i.e., a directory containing a `pyproject.toml` or `setup.py` file in the root).",
+          "description": "The path to a dependency, either a wheel (a `.whl` file), source distribution (a `.zip` or `.tar.gz` file), or source tree (i.e., a directory containing a `pyproject.toml` or `setup.py` file in the root).",
           "type": "object",
           "required": [
             "path"
@@ -816,14 +1178,14 @@
           ]
         },
         {
-          "description": "An ARM-based macOS target, as seen on Apple Silicon devices.",
+          "description": "An ARM-based macOS target, as seen on Apple Silicon devices\n\nBy default, assumes the least-recent, non-EOL macOS version (12.0), but respects the `MACOSX_DEPLOYMENT_TARGET` environment variable if set.",
           "type": "string",
           "enum": [
             "aarch64-apple-darwin"
           ]
         },
         {
-          "description": "An x86 macOS target.",
+          "description": "An x86 macOS target.\n\nBy default, assumes the least-recent, non-EOL macOS version (12.0), but respects the `MACOSX_DEPLOYMENT_TARGET` environment variable if set.",
           "type": "string",
           "enum": [
             "x86_64-apple-darwin"
@@ -865,6 +1227,13 @@
           ]
         },
         {
+          "description": "An `x86_64` target for the `manylinux_2_31` platform.",
+          "type": "string",
+          "enum": [
+            "x86_64-manylinux_2_31"
+          ]
+        },
+        {
           "description": "An ARM64 target for the `manylinux_2_17` platform.",
           "type": "string",
           "enum": [
@@ -876,6 +1245,13 @@
           "type": "string",
           "enum": [
             "aarch64-manylinux_2_28"
+          ]
+        },
+        {
+          "description": "An ARM64 target for the `manylinux_2_31` platform.",
+          "type": "string",
+          "enum": [
+            "aarch64-manylinux_2_31"
           ]
         }
       ]
@@ -901,8 +1277,7 @@
             "$ref": "#/definitions/String"
           }
         }
-      },
-      "additionalProperties": false
+      }
     }
   }
 }
