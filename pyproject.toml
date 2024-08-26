@@ -25,6 +25,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
@@ -89,6 +90,8 @@ scripts.lint = "pre-commit run --all-files --show-diff-on-failures {args}"
 dependencies = ["pylint"]
 scripts.lint = "pylint validate_pyproject_schema_store {args}"
 
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.13", "3.12", "3.11", "3.10", "3.9", "3.8"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -126,9 +129,6 @@ module = "validate_pyproject_schema_store.*"
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
-
-[tool.ruff]
-src = ["src"]
 
 [tool.ruff.lint]
 extend-select = [

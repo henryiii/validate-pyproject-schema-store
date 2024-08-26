@@ -16,7 +16,7 @@ env:
 
 jobs:
   checks:
-    name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
+    name: Check on ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
     strategy:
       fail-fast: false
@@ -30,12 +30,14 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
+          allow-prereleases: true
           python-version: |
             3.8
             3.9
             3.10
             3.11
             3.12
+            3.13
 
       - name: Setup uv
         uses: yezz123/setup-uv@v4
