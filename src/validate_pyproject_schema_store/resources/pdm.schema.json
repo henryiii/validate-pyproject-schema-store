@@ -201,6 +201,10 @@
                 },
                 "help": {
                   "$ref": "#/definitions/script-help"
+                },
+                "keep_going": {
+                  "type": "boolean",
+                  "description": "continue the execution of the remaining scripts after a failure"
                 }
               }
             }
