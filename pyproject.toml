@@ -180,4 +180,4 @@ messages_control.disable = [
 ]
 
 [tool.repo-review]
-ignore = ["RTD", "PY004"]
+ignore = ["RTD", "PY004", "PC170"]
