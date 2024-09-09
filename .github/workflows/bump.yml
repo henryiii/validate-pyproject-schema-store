@@ -29,7 +29,7 @@ jobs:
           hatch run tools/sync.py
           git status
           git diff
-      - uses: peter-evans/create-pull-request@v6
+      - uses: peter-evans/create-pull-request@v7
         with:
           title: "chore(deps): bump versions"
           body: |
