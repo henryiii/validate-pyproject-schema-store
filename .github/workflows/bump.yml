@@ -39,7 +39,7 @@ jobs:
           hatch run tools/sync.py
           git status
           git diff
-  
+
       - name: Get current version
         shell: python
         id: getver
@@ -54,7 +54,8 @@ jobs:
 
       - uses: peter-evans/create-pull-request@v7
         with:
-          title: "chore(deps): bump version to ${{ steps.getver.outputs.version }}"
+          title:
+            "chore(deps): bump version to ${{ steps.getver.outputs.version }}"
           body: |
             Update the stored schema files.
 
