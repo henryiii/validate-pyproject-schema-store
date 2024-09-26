@@ -40,9 +40,7 @@ jobs:
             3.13
 
       - name: Setup uv
-        uses: yezz123/setup-uv@v4
+        uses: astral-sh/setup-uv@v3
 
-      - name: Install Hatch
-        run: uv pip install --system "hatch>=1.10"
       - name: Test package
-        run: hatch test -ca
+        run: uvx hatch test -ca
