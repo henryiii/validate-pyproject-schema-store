@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2024.09.23"
+version = "2024.10.07"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
@@ -67,6 +67,7 @@ mypy = "validate_pyproject_schema_store.schema:get_schema"
 ruff = "validate_pyproject_schema_store.schema:get_schema"
 hatch = "validate_pyproject_schema_store.schema:get_schema"
 scikit-build = "validate_pyproject_schema_store.schema:get_schema"
+setuptools_scm = "validate_pyproject_schema_store.schema:get_schema"
 poetry = "validate_pyproject_schema_store.schema:get_schema"
 pdm = "validate_pyproject_schema_store.schema:get_schema"
 pyright = "validate_pyproject_schema_store.schema:get_schema"
