@@ -6,6 +6,7 @@
   "hatch": "https://json.schemastore.org/hatch.json",
   "scikit-build": "https://json.schemastore.org/partial-scikit-build.json",
   "setuptools": "https://json.schemastore.org/partial-setuptools.json",
+  "setuptools_scm": "https://json.schemastore.org/partial-setuptools-scm.json",
   "poetry": "https://json.schemastore.org/partial-poetry.json",
   "pdm": "https://json.schemastore.org/partial-pdm.json",
   "pyright": "https://json.schemastore.org/partial-pyright.json",
