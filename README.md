@@ -7,8 +7,8 @@
 
 <!-- SPHINX-START -->
 
-This provides a versioned copy of SchemaStore for [validate-pyproject][]. You
-can pin this to get a stable set of schema files.
+This provides a versioned copy of [SchemaStore][] for [validate-pyproject][].
+You can pin this to get a stable set of schema files.
 
 ## Usage
 
@@ -68,5 +68,5 @@ hatch run tools/sync.py
 [pypi-platforms]:           https://img.shields.io/pypi/pyversions/validate-pyproject-schema-store
 [pypi-version]:             https://img.shields.io/pypi/v/validate-pyproject-schema-store
 [validate-pyproject]:       https://github.com/abravalheri/validate-pyproject
-
+[schemastore]:              https://www.schemastore.org
 <!-- prettier-ignore-end -->
