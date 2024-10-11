@@ -7,8 +7,8 @@
 
 <!-- SPHINX-START -->
 
-This provides a versioned copy of [SchemaStore][] for [validate-pyproject][]. You
-can pin this to get a stable set of schema files.
+This provides a versioned copy of [SchemaStore][] for [validate-pyproject][].
+You can pin this to get a stable set of schema files.
 
 ## Usage
 
