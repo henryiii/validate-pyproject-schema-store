@@ -27,11 +27,18 @@ async def get_url(session, url: str) -> dict[str, Any]:
         return await resp.json()  # type: ignore[no-any-return]
 
 
-def write_if_changed(filename: Path, contents: str) -> bool:
+def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
+    # if filename.name == "pdm.schema.json":
+    properties = contents.get("properties", {})
+    for prop in properties.values():
+        if prop.get("$ref", "").startswith("https://json.schemastore.org/partial"):
+            prop.clear()
+            prop["type"] = "object"
+    new = json.dumps(contents, indent=2) + "\n"
     prev = filename.read_text(encoding="utf-8") if filename.is_file() else ""
-    if prev == contents:
+    if prev == new:
         return False
-    filename.write_text(contents, encoding="utf-8")
+    filename.write_text(new, encoding="utf-8")
     return True
 
 
@@ -45,8 +52,7 @@ async def main() -> None:
         tool_table = {t: d["$ref"] for t, d in tool_properties.items() if "$ref" in d}
 
         tool_json = RESOURCES / "tool.json"
-        new = json.dumps(tool_table, indent=2) + "\n"
-        changed |= write_if_changed(tool_json, new)
+        changed |= write_if_changed(tool_json, tool_table)
 
         async with asyncio.TaskGroup() as tg:
             results = {
@@ -58,8 +64,7 @@ async def main() -> None:
             target = RESOURCES / f"{tool}.schema.json"
             result = future.result()
 
-            new = json.dumps(result, indent=2) + "\n"
-            changed |= write_if_changed(target, new)
+            changed |= write_if_changed(target, result)
 
         if changed:
             pyproject = DIR.parent / "pyproject.toml"
