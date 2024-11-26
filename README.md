@@ -10,6 +10,9 @@
 This provides a versioned copy of [SchemaStore][] for [validate-pyproject][].
 You can pin this to get a stable set of schema files.
 
+Nested schemas are not supported yet. Support will require updates to
+validate-pyproject. For now, they are replaced with `"type": "object"`.
+
 ## Usage
 
 The following should be supported:

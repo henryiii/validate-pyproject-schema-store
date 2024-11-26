@@ -918,6 +918,9 @@
           "key": "https://backend.pdm-project.org/build_config/#specify-the-package-files"
         }
       }
+    },
+    "dockerize": {
+      "type": "object"
     }
   },
   "type": "object",
