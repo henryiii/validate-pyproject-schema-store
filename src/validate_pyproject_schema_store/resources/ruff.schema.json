@@ -1169,7 +1169,7 @@
             "null"
           ],
           "additionalProperties": {
-            "type": "string"
+            "$ref": "#/definitions/Alias"
           }
         }
       },
@@ -2795,6 +2795,10 @@
         "AIR0",
         "AIR00",
         "AIR001",
+        "AIR3",
+        "AIR30",
+        "AIR301",
+        "AIR302",
         "ALL",
         "ANN",
         "ANN0",
@@ -3423,6 +3427,9 @@
         "PLC0414",
         "PLC0415",
         "PLC1",
+        "PLC18",
+        "PLC180",
+        "PLC1802",
         "PLC19",
         "PLC190",
         "PLC1901",
@@ -3706,6 +3713,7 @@
         "PTH205",
         "PTH206",
         "PTH207",
+        "PTH208",
         "PYI",
         "PYI0",
         "PYI00",
@@ -3834,7 +3842,13 @@
         "RUF038",
         "RUF039",
         "RUF04",
+        "RUF040",
+        "RUF041",
+        "RUF046",
         "RUF048",
+        "RUF05",
+        "RUF052",
+        "RUF055",
         "RUF1",
         "RUF10",
         "RUF100",
@@ -4004,6 +4018,9 @@
         "TC003",
         "TC004",
         "TC005",
+        "TC006",
+        "TC007",
+        "TC008",
         "TC01",
         "TC010",
         "TD",
