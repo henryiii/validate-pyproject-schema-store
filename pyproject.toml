@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2024.11.25"
+version = "2025.01.06"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
@@ -68,9 +68,11 @@ ruff = "validate_pyproject_schema_store.schema:get_schema"
 hatch = "validate_pyproject_schema_store.schema:get_schema"
 scikit-build = "validate_pyproject_schema_store.schema:get_schema"
 setuptools_scm = "validate_pyproject_schema_store.schema:get_schema"
+poe = "validate_pyproject_schema_store.schema:get_schema"
 poetry = "validate_pyproject_schema_store.schema:get_schema"
 pdm = "validate_pyproject_schema_store.schema:get_schema"
 pyright = "validate_pyproject_schema_store.schema:get_schema"
+tox = "validate_pyproject_schema_store.schema:get_schema"
 uv = "validate_pyproject_schema_store.schema:get_schema"
 
 [project.entry-points."pipx.run"]
