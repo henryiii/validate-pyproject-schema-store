@@ -40,7 +40,7 @@ jobs:
             3.13
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v5
 
       - name: Test package
         run: uvx hatch test -ca
