@@ -437,7 +437,7 @@
       ]
     },
     "ignore": {
-      "description": "A list of rule codes or prefixes to ignore. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes.",
+      "description": "A list of rule codes or prefixes to ignore. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes. `ignore` takes precedence over `select` if the same prefix appears in both.",
       "deprecated": true,
       "type": [
         "array",
@@ -665,7 +665,7 @@
       ]
     },
     "select": {
-      "description": "A list of rule codes or prefixes to enable. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes.",
+      "description": "A list of rule codes or prefixes to enable. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes. `ignore` takes precedence over `select` if the same prefix appears in both.",
       "deprecated": true,
       "type": [
         "array",
@@ -880,7 +880,7 @@
       "anyOf": [
         {
           "description": "Wrap docstring code examples at a fixed line width.",
-          "allOf": [
+          "oneOf": [
             {
               "$ref": "#/definitions/LineWidth"
             }
@@ -888,17 +888,9 @@
         },
         {
           "description": "Respect the line length limit setting for the surrounding Python code.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/Dynamic"
-            }
-          ]
+          "const": "dynamic"
         }
       ]
-    },
-    "Dynamic": {
-      "type": "string",
-      "const": "dynamic"
     },
     "Flake8AnnotationsOptions": {
       "description": "Options for the `flake8-annotations` plugin.",
@@ -2224,7 +2216,7 @@
           ]
         },
         "ignore": {
-          "description": "A list of rule codes or prefixes to ignore. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes.",
+          "description": "A list of rule codes or prefixes to ignore. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes. `ignore` takes precedence over `select` if the same prefix appears in both.",
           "type": [
             "array",
             "null"
@@ -2382,7 +2374,7 @@
           ]
         },
         "select": {
-          "description": "A list of rule codes or prefixes to enable. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes.",
+          "description": "A list of rule codes or prefixes to enable. Prefixes can specify exact rules (like `F841`), entire categories (like `F`), or anything in between.\n\nWhen breaking ties between enabled and disabled rules (via `select` and `ignore`, respectively), more specific prefixes override less specific prefixes. `ignore` takes precedence over `select` if the same prefix appears in both.",
           "type": [
             "array",
             "null"
@@ -3412,9 +3404,11 @@
         "LOG00",
         "LOG001",
         "LOG002",
+        "LOG004",
         "LOG007",
         "LOG009",
         "LOG01",
+        "LOG014",
         "LOG015",
         "N",
         "N8",
@@ -3954,6 +3948,7 @@
         "RUF05",
         "RUF051",
         "RUF052",
+        "RUF053",
         "RUF055",
         "RUF056",
         "RUF057",
@@ -4217,6 +4212,7 @@
         "UP045",
         "UP046",
         "UP047",
+        "UP049",
         "W",
         "W1",
         "W19",
