@@ -4,6 +4,7 @@
   "mypy": "https://json.schemastore.org/partial-mypy.json",
   "ruff": "https://json.schemastore.org/ruff.json",
   "hatch": "https://json.schemastore.org/hatch.json",
+  "maturin": "https://json.schemastore.org/maturin.json",
   "scikit-build": "https://json.schemastore.org/partial-scikit-build.json",
   "setuptools": "https://json.schemastore.org/partial-setuptools.json",
   "setuptools_scm": "https://json.schemastore.org/partial-setuptools-scm.json",
@@ -12,6 +13,7 @@
   "pdm": "https://json.schemastore.org/partial-pdm.json",
   "pyright": "https://json.schemastore.org/partial-pyright.json",
   "repo-review": "https://json.schemastore.org/partial-repo-review.json",
+  "tombi": "https://json.schemastore.org/tombi.json",
   "tox": "https://json.schemastore.org/partial-tox.json",
   "uv": "https://json.schemastore.org/uv.json"
 }
