@@ -165,6 +165,7 @@ extend-select = [
 ignore = [
   "PLR",    # Design related pylint codes
   "ISC001", # Conflicts with formatter
+  "EXE003", # Doesn't support uv
 ]
 isort.required-imports = ["from __future__ import annotations"]
 
