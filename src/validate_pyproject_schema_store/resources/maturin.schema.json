@@ -4,6 +4,7 @@
   "title": "ToolMaturin",
   "description": "The `[tool.maturin]` section of a pyproject.toml",
   "type": "object",
+  "x-tombi-table-keys-order": "schema",
   "properties": {
     "all-features": {
       "description": "Activate all available features",
@@ -285,6 +286,7 @@
       "required": [
         "name"
       ],
+      "x-tombi-table-keys-order": "schema",
       "properties": {
         "kind": {
           "description": "Kind of target (\"bin\", \"cdylib\")",
@@ -356,6 +358,7 @@
             "format",
             "path"
           ],
+          "x-tombi-table-keys-order": "schema",
           "properties": {
             "format": {
               "description": "One or more [Format] values",
@@ -382,6 +385,7 @@
           "required": [
             "Manylinux"
           ],
+          "x-tombi-table-keys-order": "schema",
           "properties": {
             "Manylinux": {
               "type": "object",
@@ -389,6 +393,7 @@
                 "x",
                 "y"
               ],
+              "x-tombi-table-keys-order": "schema",
               "properties": {
                 "x": {
                   "description": "GLIBC version major",
@@ -413,6 +418,7 @@
           "required": [
             "Musllinux"
           ],
+          "x-tombi-table-keys-order": "schema",
           "properties": {
             "Musllinux": {
               "type": "object",
@@ -420,6 +426,7 @@
                 "x",
                 "y"
               ],
+              "x-tombi-table-keys-order": "schema",
               "properties": {
                 "x": {
                   "description": "musl libc version major",
@@ -469,6 +476,7 @@
     "TargetConfig": {
       "description": "Target configuration",
       "type": "object",
+      "x-tombi-table-keys-order": "schema",
       "properties": {
         "macos-deployment-target": {
           "description": "macOS deployment target version",
