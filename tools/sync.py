@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run
 # /// script
 # requires-python = ">=3.11"
 # dependencies = [ "aiohttp", "tomlkit" ]
@@ -21,7 +21,7 @@ RESOURCES = DIR.parent / "src/validate_pyproject_schema_store/resources"
 RESOURCES.mkdir(parents=True, exist_ok=True)
 
 
-async def get_url(session, url: str) -> dict[str, Any]:
+async def get_url(session: aiohttp.ClientSession, url: str) -> dict[str, Any]:
     print("Getting", url)
     async with session.get(url) as resp:
         return await resp.json()  # type: ignore[no-any-return]
@@ -42,13 +42,24 @@ def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
     return True
 
 
+async def get_tool(
+    session: aiohttp.ClientSession, tools: dict[str, Any]
+) -> dict[str, Any]:
+    try:
+        return tools["properties"]  # type: ignore[no-any-return]
+    except KeyError:
+        url = tools["$ref"]
+        res = await get_url(session, url)
+        return res["properties"]  # type: ignore[no-any-return]
+
+
 async def main() -> None:
     changed = False
 
     async with aiohttp.ClientSession() as session:
         res_json = await get_url(session, "https://json.schemastore.org/pyproject.json")
 
-        tool_properties = res_json["properties"]["tool"]["properties"]
+        tool_properties = await get_tool(session, res_json["properties"]["tool"])
         tool_table = {t: d["$ref"] for t, d in tool_properties.items() if "$ref" in d}
 
         tool_json = RESOURCES / "tool.json"
