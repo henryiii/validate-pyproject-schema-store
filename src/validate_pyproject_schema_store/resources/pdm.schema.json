@@ -920,7 +920,7 @@
       }
     },
     "dockerize": {
-      "type": "object"
+      "$ref": "https://json.schemastore.org/partial-pdm-dockerize.json"
     }
   },
   "type": "object",

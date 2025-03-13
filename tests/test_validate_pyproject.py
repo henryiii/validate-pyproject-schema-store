@@ -38,3 +38,17 @@ def test__loads(caplog):
         "validate_pyproject_schema_store.schema.get_schema defines `tool.hatch` schema"
         in caplog.text
     )
+
+
+def test_version_24_multi(caplog):
+    pyproject_as_dict = tomllib.loads("""
+        [tool.pdm]
+        dockerize.anything = "invalid"
+    """)
+
+    validator = api.Validator()
+    validator(pyproject_as_dict)
+    assert (
+        "validate_pyproject_schema_store.schema.get_schema defines `tool.pdm` schema"
+        in caplog.text
+    )

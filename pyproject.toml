@@ -34,23 +34,23 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+validate-pyproject = [
+  "validate-pyproject",
+]
+all = [
+  "validate-pyproject[all]",
+]
+
+[dependency-groups]
 test = [
   "pytest >=6",
   "pytest-cov >=3",
   "validate-pyproject>=0.16",
   "tomli; python_version<'3.11'",
+  "packaging",
 ]
-docs = [
-  "sphinx>=7.0",
-  "myst_parser>=0.13",
-  "sphinx_copybutton",
-  "sphinx_autodoc_typehints",
-  "furo>=2023.08.17",
-]
-validate-pyproject = [
-  "validate-pyproject",
-]
-all = [
+dev = [
+  { include-group = "test" },
   "validate-pyproject[all]",
 ]
 
@@ -80,6 +80,9 @@ tombi = "validate_pyproject_schema_store.schema:get_schema"
 tox = "validate_pyproject_schema_store.schema:get_schema"
 uv = "validate_pyproject_schema_store.schema:get_schema"
 
+[project.entry-points."validate_pyproject.multi_schema"]
+validate-pyproject-schema-store = "validate_pyproject_schema_store.schema:get_multi_schema"
+
 [project.entry-points."pipx.run"]
 validate-pyproject-schema-store = "validate_pyproject.cli:main"
 
@@ -87,7 +90,14 @@ validate-pyproject-schema-store = "validate_pyproject.cli:main"
 installer = "uv"
 
 [tool.hatch.envs.hatch-test]
-features = ["test"]
+# Duplicated waiting for dependency-group support
+dependencies = [
+  "pytest >=6",
+  "pytest-cov >=3",
+  "validate-pyproject>=0.16",
+  "tomli; python_version<'3.11'",
+  "packaging",
+]
 
 [tool.hatch.envs.lint]
 dependencies = ["pre-commit"]

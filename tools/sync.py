@@ -28,12 +28,6 @@ async def get_url(session: aiohttp.ClientSession, url: str) -> dict[str, Any]:
 
 
 def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
-    # if filename.name == "pdm.schema.json":
-    properties = contents.get("properties", {})
-    for prop in properties.values():
-        if prop.get("$ref", "").startswith("https://json.schemastore.org/partial"):
-            prop.clear()
-            prop["type"] = "object"
     new = json.dumps(contents, indent=2) + "\n"
     prev = filename.read_text(encoding="utf-8") if filename.is_file() else ""
     if prev == new:
@@ -64,6 +58,7 @@ async def main() -> None:
 
         tool_json = RESOURCES / "tool.json"
         changed |= write_if_changed(tool_json, tool_table)
+        nested = {}
 
         async with asyncio.TaskGroup() as tg:
             results = {
@@ -75,7 +70,21 @@ async def main() -> None:
             target = RESOURCES / f"{tool}.schema.json"
             result = future.result()
 
+            for prop in result.get("properties", {}).values():
+                url = prop.get("$ref", "")
+                if url.startswith("https://json.schemastore.org/"):
+                    filename = url.removeprefix(
+                        "https://json.schemastore.org/"
+                    ).removesuffix(".json")
+                    nested_target = RESOURCES / f"{filename}.schema.json"
+                    nested_result = await get_url(session, url)
+                    changed |= write_if_changed(nested_target, nested_result)
+                    nested[filename] = url
+
             changed |= write_if_changed(target, result)
+
+        extra_json = RESOURCES / "extra.json"
+        changed |= write_if_changed(extra_json, nested)
 
         if changed:
             pyproject = DIR.parent / "pyproject.toml"
