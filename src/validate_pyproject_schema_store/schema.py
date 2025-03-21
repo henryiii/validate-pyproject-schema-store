@@ -71,6 +71,9 @@ def get_schema(tool: str) -> dict[str, Any]:
     return tool_json
 
 
+get_schema.priority = -2  # type: ignore[attr-defined]
+
+
 def get_multi_schema() -> dict[str, Any]:
     tools = get_tools()
     extras = get_extra()
@@ -78,4 +81,5 @@ def get_multi_schema() -> dict[str, Any]:
     return {
         "tools": {tool: _load_schema(f"{tool}.schema.json") for tool in tools},
         "schemas": [_load_schema(f"{extra}.schema.json") for extra in extras],
+        "priority": -1,
     }
