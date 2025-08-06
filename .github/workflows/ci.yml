@@ -49,7 +49,6 @@ jobs:
       - name: Test package
         run: uvx hatch test -ca
 
-
   pass:
     if: always()
     needs: [checks]
