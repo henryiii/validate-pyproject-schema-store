@@ -14,6 +14,8 @@ concurrency:
 env:
   FORCE_COLOR: 3
 
+permissions: {}
+
 jobs:
   checks:
     name: Check on ${{ matrix.runs-on }}
@@ -27,6 +29,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - uses: actions/setup-python@v5
         with:
@@ -38,9 +41,22 @@ jobs:
             3.11
             3.12
             3.13
+            3.14
 
       - name: Setup uv
         uses: astral-sh/setup-uv@v6
 
       - name: Test package
         run: uvx hatch test -ca
+
+
+  pass:
+    if: always()
+    needs: [checks]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
