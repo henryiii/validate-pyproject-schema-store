@@ -2,7 +2,7 @@ name: Bump
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 8 * * 1" # "At 08:00 on Monday"
+    - cron: 0 8 * * * # At 08:00 every day
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -50,6 +50,7 @@ jobs:
               print(f"version={pyproject['project']['version']}", file=f)
 
       - uses: peter-evans/create-pull-request@v7
+        id: create-pr
         with:
           title: |
             chore(deps): bump version to ${{ steps.getver.outputs.version }}
@@ -63,3 +64,10 @@ jobs:
           delete-branch: true
           token: ${{ steps.generate-token.outputs.token }}
           sign-commits: true
+
+      - name: Enable pull request auto-merge
+        run:
+          gh pr merge --merge --auto ${{
+          steps.create-pr.outputs.pull-request-number }}
+        env:
+          GH_TOKEN: ${{ secrets.token }}

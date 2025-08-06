@@ -1,0 +1,33 @@
+name: Create release on pyproject-schema-store-bot merge
+on:
+  pull_request:
+    types: [closed]
+jobs:
+  create-release:
+    if:
+      github.event.pull_request.merged == true && github.actor ==
+      'pyproject-schema-store-bot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get version from pyproject.toml
+        id: get_version
+        uses: mikefarah/yq@v4
+        with:
+          cmd: yq .project.version pyproject.toml
+      - name: Create git tag
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git tag ${{ steps.get_version.outputs.result }}
+          git push origin ${{ steps.get_version.outputs.result }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.result }}
+          token: ${{ secrets.token }}
