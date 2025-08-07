@@ -68,7 +68,7 @@ jobs:
       - name: Enable pull request auto-merge
         if: steps.create-pr.outputs.pull-request-number
         run:
-          gh pr merge --rebase --auto --delete-branch ${{
+          gh pr merge --squash --auto --delete-branch ${{
           steps.create-pr.outputs.pull-request-number }}
         env:
           GH_TOKEN: ${{ secrets.token }}
