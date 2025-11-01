@@ -120,6 +120,7 @@
         "junit_family": {
           "type": "string",
           "enum": [
+            "legacy",
             "xunit1",
             "xunit2"
           ],
