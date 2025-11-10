@@ -85,6 +85,6 @@ repos:
       - id: check-readthedocs
 
   - repo: https://github.com/scientific-python/cookie
-    rev: 2025.10.20
+    rev: 2025.11.10
     hooks:
       - id: sp-repo-review
