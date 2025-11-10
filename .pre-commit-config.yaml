@@ -34,7 +34,7 @@ repos:
         exclude: '^src/validate_pyproject_schema_store/resources/.*\.json'
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: "v0.14.3"
+    rev: "v0.14.4"
     hooks:
       - id: ruff-check
         args: ["--fix", "--show-fixes"]
