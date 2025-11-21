@@ -16,7 +16,7 @@
   "pytest": "https://json.schemastore.org/partial-pytest.json",
   "repo-review": "https://json.schemastore.org/partial-repo-review.json",
   "taskipy": "https://json.schemastore.org/partial-taskipy.json",
-  "tombi": "https://www.schemastore.org/tombi.json",
+  "tombi": "https://json.schemastore.org/tombi.json",
   "tox": "https://json.schemastore.org/partial-tox.json",
   "uv": "https://json.schemastore.org/uv.json"
 }
