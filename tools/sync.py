@@ -29,7 +29,9 @@ async def get_url(session: aiohttp.ClientSession, url: str) -> dict[str, Any]:
 
 def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
     new = json.dumps(contents, indent=2) + "\n"
-    new = new.replace('"uint64"', '"uint"')  # Workaround for validate-pyproject missing this
+    new = new.replace(
+        '"uint64"', '"uint"'
+    )  # Workaround for validate-pyproject missing this
     prev = filename.read_text(encoding="utf-8") if filename.is_file() else ""
     if prev == new:
         return False
