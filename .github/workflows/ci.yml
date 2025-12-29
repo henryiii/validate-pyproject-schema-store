@@ -52,7 +52,7 @@ jobs:
   pass:
     if: always()
     needs: [checks]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 2
     steps:
       - name: Decide whether the needed jobs succeeded or failed
