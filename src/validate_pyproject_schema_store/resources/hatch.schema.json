@@ -445,6 +445,9 @@
         "only-include": {
           "$ref": "#/definitions/OnlyInclude"
         },
+        "hooks": {
+          "$ref": "#/definitions/BuildHooks"
+        },
         "dependencies": {
           "title": "Dependencies",
           "description": "Additional dependencies to install in the environment",
@@ -568,7 +571,8 @@
       "type": "object",
       "additionalProperties": {
         "$ref": "#/definitions/Target"
-      }
+      },
+      "x-tombi-additional-key-label": "target_name"
     },
     "Hook": {
       "title": "Build hook",
@@ -622,7 +626,8 @@
           "type": "boolean",
           "default": true
         }
-      }
+      },
+      "additionalProperties": true
     },
     "BuildHooks": {
       "title": "Build Hook Plugins",
@@ -635,7 +640,8 @@
       "type": "object",
       "additionalProperties": {
         "$ref": "#/definitions/Hook"
-      }
+      },
+      "x-tombi-additional-key-label": "hook_name"
     },
     "Build": {
       "title": "Build",
