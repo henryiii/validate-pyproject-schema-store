@@ -96,20 +96,26 @@ async def main() -> None:
             nested_names = {
                 schema_name_from_url(url)
                 for url in iter_schema_refs(result)
-                if url.startswith((
-                    "https://json.schemastore.org/",
-                    "https://www.schemastore.org/",
-                ))
+                if url.startswith(
+                    (
+                        "https://json.schemastore.org/",
+                        "https://www.schemastore.org/",
+                    )
+                )
             }
             ref_name = schema_name_from_url(ref)
-            target_name = ref_name if tool in nested_names and ref_name != tool else tool
+            target_name = (
+                ref_name if tool in nested_names and ref_name != tool else tool
+            )
             target = RESOURCES / f"{target_name}.schema.json"
 
             for url in iter_schema_refs(result):
-                if url.startswith((
-                    "https://json.schemastore.org/",
-                    "https://www.schemastore.org/",
-                )):
+                if url.startswith(
+                    (
+                        "https://json.schemastore.org/",
+                        "https://www.schemastore.org/",
+                    )
+                ):
                     if url.partition("#")[0] == ref.partition("#")[0]:
                         continue
                     filename = schema_name_from_url(url)

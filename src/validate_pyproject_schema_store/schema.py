@@ -2,16 +2,10 @@ from __future__ import annotations
 
 import functools
 import json
-import sys
+from importlib.resources import files
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
-
-if sys.version_info < (3, 9):
-    from importlib_resources import files
-else:
-    from importlib.resources import files
-
 
 DIR = Path(__file__).parent.resolve()
 RESOURCES = files("validate_pyproject_schema_store") / "resources"
