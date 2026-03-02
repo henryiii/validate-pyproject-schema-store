@@ -12,6 +12,7 @@ import datetime
 import json
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 import aiohttp
 import tomlkit
@@ -25,6 +26,25 @@ async def get_url(session: aiohttp.ClientSession, url: str) -> dict[str, Any]:
     print("Getting", url)
     async with session.get(url) as resp:
         return await resp.json()  # type: ignore[no-any-return]
+
+
+def schema_name_from_url(url: str) -> str:
+    parsed = urlparse(url.partition("#")[0])
+    return Path(parsed.path).name.removesuffix(".json")
+
+
+def iter_schema_refs(value: Any) -> set[str]:
+    refs: set[str] = set()
+    if isinstance(value, dict):
+        ref = value.get("$ref")
+        if isinstance(ref, str):
+            refs.add(ref)
+        for nested in value.values():
+            refs.update(iter_schema_refs(nested))
+    elif isinstance(value, list):
+        for nested in value:
+            refs.update(iter_schema_refs(nested))
+    return refs
 
 
 def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
@@ -70,15 +90,35 @@ async def main() -> None:
             }
 
         for tool, future in results.items():
-            target = RESOURCES / f"{tool}.schema.json"
+            ref = tool_table[tool]
             result = future.result()
 
-            for prop in result.get("properties", {}).values():
-                url = prop.get("$ref", "")
-                if url.startswith("https://json.schemastore.org/"):
-                    filename = url.removeprefix(
-                        "https://json.schemastore.org/"
-                    ).removesuffix(".json")
+            nested_names = {
+                schema_name_from_url(url)
+                for url in iter_schema_refs(result)
+                if url.startswith(
+                    (
+                        "https://json.schemastore.org/",
+                        "https://www.schemastore.org/",
+                    )
+                )
+            }
+            ref_name = schema_name_from_url(ref)
+            target_name = (
+                ref_name if tool in nested_names and ref_name != tool else tool
+            )
+            target = RESOURCES / f"{target_name}.schema.json"
+
+            for url in iter_schema_refs(result):
+                if url.startswith(
+                    (
+                        "https://json.schemastore.org/",
+                        "https://www.schemastore.org/",
+                    )
+                ):
+                    if url.partition("#")[0] == ref.partition("#")[0]:
+                        continue
+                    filename = schema_name_from_url(url)
                     nested_target = RESOURCES / f"{filename}.schema.json"
                     nested_result = await get_url(session, url)
                     changed |= write_if_changed(nested_target, nested_result)
