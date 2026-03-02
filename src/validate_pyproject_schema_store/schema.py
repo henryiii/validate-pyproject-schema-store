@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlparse
 
 if sys.version_info < (3, 9):
     from importlib_resources import files
@@ -43,13 +44,26 @@ def _load_schema(filename: str) -> dict[str, Any]:
         return json.load(f)  # type: ignore[no-any-return]
 
 
+def _schema_name_from_url(url: str) -> str:
+    parsed = urlparse(url.partition("#")[0])
+    return Path(parsed.path).name.removesuffix(".json")
+
+
+def _tool_schema_filename(tool: str, url: str) -> str:
+    by_url = f"{_schema_name_from_url(url)}.schema.json"
+    by_url_path = RESOURCES / by_url
+    if by_url_path.is_file():
+        return by_url
+    return f"{tool}.schema.json"
+
+
 def get_schema(tool: str) -> dict[str, Any]:
     tools = get_tools()
     if tool not in tools:
         msg = f"Must be valid tool, got {tool}"
         raise AssertionError(msg)
 
-    tool_json = _load_schema(f"{tool}.schema.json")
+    tool_json = _load_schema(_tool_schema_filename(tool, tools[tool]))
     orig_tool_json = tool_json.copy()
 
     _, _, path = tools[tool].partition("#")
@@ -79,7 +93,13 @@ def get_multi_schema() -> dict[str, Any]:
     extras = get_extra()
 
     return {
-        "tools": {tool: _load_schema(f"{tool}.schema.json") for tool in tools},
-        "schemas": [_load_schema(f"{extra}.schema.json") for extra in extras],
+        "tools": {
+            tool: _load_schema(_tool_schema_filename(tool, url))
+            for tool, url in tools.items()
+        },
+        "schemas": [
+            _load_schema(f"{_schema_name_from_url(url)}.schema.json")
+            for url in extras.values()
+        ],
         "priority": -1,
     }
