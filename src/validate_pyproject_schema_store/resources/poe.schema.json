@@ -8,6 +8,7 @@
   "description": "Poe the Poet is a task runner and build tool that uses simple configuration to define project tasks. It can work as a standalone tool or as a plugin for Poetry.",
   "definitions": {
     "standard_options": {
+      "additionalProperties": true,
       "properties": {
         "args": {
           "anyOf": [
@@ -187,6 +188,7 @@
       "type": "object"
     },
     "capture_stdout_option": {
+      "additionalProperties": true,
       "properties": {
         "capture_stdout": {
           "description": "Redirects the task output to a file with the given path. Supports environment variable interpolation.",
@@ -201,6 +203,7 @@
       "type": "object"
     },
     "use_exec_option": {
+      "additionalProperties": true,
       "properties": {
         "use_exec": {
           "description": "Specify that this task should be executed in the same process, instead of as a subprocess. Note: This feature has limitations, such as not being compatible with tasks that are referenced by other tasks and not working on Windows.",
@@ -478,6 +481,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "empty_glob": {
               "default": "pass",
@@ -523,6 +527,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "assert": {
               "description": "A boolean indicating if the task will fail when the result of the expression is falsy.",
@@ -559,6 +564,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "ignore_fail": {
               "description": "If true the failure of the referenced task will be ignored and the ref task will return exit code 0.",
@@ -605,6 +611,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "ignore_fail": {
               "$ref": "#/definitions/ignore_fail_exec_option"
@@ -637,6 +644,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "default_item_type": {
               "default": "ref",
@@ -664,6 +672,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "default_item_type": {
               "default": "ref",
@@ -709,6 +718,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "ignore_fail": {
               "$ref": "#/definitions/ignore_fail_exec_option"
@@ -769,6 +779,7 @@
         },
         {
           "type": "object",
+          "additionalProperties": true,
           "properties": {
             "control": {
               "$ref": "#/definitions/one_of_tasks",
@@ -869,6 +880,10 @@
     "default_array_task_type": {
       "default": "sequence",
       "description": "When a task is declared as an array (instead of a table), then it is interpreted as the default array task type, which will be 'sequence' unless otherwise specified.",
+      "enum": [
+        "sequence",
+        "parallel"
+      ],
       "type": "string"
     },
     "default_task_type": {
