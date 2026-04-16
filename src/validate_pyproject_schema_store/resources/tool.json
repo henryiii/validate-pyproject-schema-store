@@ -1,6 +1,7 @@
 {
   "black": "https://json.schemastore.org/partial-black.json",
   "cibuildwheel": "https://json.schemastore.org/partial-cibuildwheel.json",
+  "fastapi": "https://json.schemastore.org/partial-fastapi.json",
   "mypy": "https://json.schemastore.org/partial-mypy.json",
   "ruff": "https://json.schemastore.org/ruff.json",
   "ty": "https://json.schemastore.org/ty.json",
