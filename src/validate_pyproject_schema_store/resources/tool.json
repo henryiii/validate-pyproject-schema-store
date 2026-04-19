@@ -20,5 +20,7 @@
   "taskipy": "https://json.schemastore.org/partial-taskipy.json",
   "tombi": "https://www.schemastore.org/tombi.json",
   "tox": "https://json.schemastore.org/tox.json",
-  "uv": "https://json.schemastore.org/uv.json"
+  "uv": "https://json.schemastore.org/uv.json",
+  "dfc": "https://json.schemastore.org/partial-dfc.json",
+  "docstring-format-checker": "https://json.schemastore.org/partial-dfc.json"
 }
