@@ -65,10 +65,28 @@ jobs:
           token: ${{ steps.generate-token.outputs.token }}
           sign-commits: true
 
-      - name: Enable pull request auto-merge
+      - name: Check all commits are from bot
+        id: check-commits
         if: steps.create-pr.outputs.pull-request-number
-        run:
-          gh pr merge --squash --auto --delete-branch ${{
-          steps.create-pr.outputs.pull-request-number }}
+        run: |
+          pr_number=${{ steps.create-pr.outputs.pull-request-number }}
+          commits=$(gh api repos/${{ github.repository }}/pulls/$pr_number/commits --jq '[.[].author.login? // "unknown"]')
+          unique_authors=$(echo "$commits" | jq -c 'unique')
+          echo "authors=$unique_authors" >> "$GITHUB_OUTPUT"
+          if [[ "$unique_authors" == '["pyproject-schema-store-bot[bot]"]' ]]; then
+            echo "only-bot=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "only-bot=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping auto-merge: PR has commits from: $unique_authors"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.token }}
+
+      - name: Enable pull request auto-merge
+        if:
+          steps.create-pr.outputs.pull-request-number &&
+          steps.check-commits.outputs.only-bot == 'true'
+        run: |
+          gh pr merge --squash --auto --delete-branch ${{ steps.create-pr.outputs.pull-request-number }}
         env:
           GH_TOKEN: ${{ secrets.token }}
