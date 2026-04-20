@@ -70,8 +70,8 @@ jobs:
         if: steps.create-pr.outputs.pull-request-number
         run: |
           pr_number=${{ steps.create-pr.outputs.pull-request-number }}
-          commits=$(gh api repos/${{ github.repository }}/pulls/$pr_number/commits --jq '[.[].author.login]')
-          unique_authors=$(echo "$commits" | jq 'unique')
+          commits=$(gh api repos/${{ github.repository }}/pulls/$pr_number/commits --jq '[.[].author.login? // "unknown"]')
+          unique_authors=$(echo "$commits" | jq -c 'unique')
           echo "authors=$unique_authors" >> "$GITHUB_OUTPUT"
           if [[ "$unique_authors" == '["pyproject-schema-store-bot[bot]"]' ]]; then
             echo "only-bot=true" >> "$GITHUB_OUTPUT"
