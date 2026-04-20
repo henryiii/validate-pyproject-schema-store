@@ -80,7 +80,6 @@ tombi = "validate_pyproject_schema_store.schema:get_schema"
 tox = "validate_pyproject_schema_store.schema:get_schema"
 uv = "validate_pyproject_schema_store.schema:get_schema"
 dfc = "validate_pyproject_schema_store.schema:get_schema"
-docstring-format-checker = "validate_pyproject_schema_store.schema:get_schema"
 
 [project.entry-points."validate_pyproject.multi_schema"]
 validate-pyproject-schema-store = "validate_pyproject_schema_store.schema:get_multi_schema"

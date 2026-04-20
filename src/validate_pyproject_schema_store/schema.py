@@ -10,7 +10,6 @@ from urllib.parse import urlparse
 DIR = Path(__file__).parent.resolve()
 RESOURCES = files("validate_pyproject_schema_store") / "resources"
 
-
 __all__ = ["get_schema"]
 
 
@@ -32,6 +31,28 @@ def get_extra() -> dict[str, str]:
         return json.load(f)  # type: ignore[no-any-return]
 
 
+@functools.lru_cache
+def _url_to_canonical_tool() -> dict[str, str]:
+    """Return a mapping from canonical URL to the canonical tool name for that URL.
+
+    For aliases (e.g., dfc and docstring-format-checker pointing to same URL),
+    this returns the first tool name in alphabetical order for consistency.
+    """
+    tools = get_tools()
+    url_to_tools: dict[str, list[str]] = {}
+    for tool, url in tools.items():
+        canonical_url = url.partition("#")[0]
+        if canonical_url not in url_to_tools:
+            url_to_tools[canonical_url] = []
+        url_to_tools[canonical_url].append(tool)
+
+    # Pick the first tool name in alphabetical order
+    return {
+        url: sorted(tools_for_url)[0]
+        for url, tools_for_url in url_to_tools.items()
+    }
+
+
 def _load_schema(filename: str) -> dict[str, Any]:
     tool_file = RESOURCES / filename
     with tool_file.open(encoding="utf-8") as f:
@@ -44,11 +65,27 @@ def _schema_name_from_url(url: str) -> str:
 
 
 def _tool_schema_filename(tool: str, url: str) -> str:
+    """
+    Return the schema filename for a tool.
+
+    For aliases (multiple tools sharing the same URL), we use the URL-derived name.
+    For unique tools, we check if URL-derived file exists first, then fall back to tool name.
+    """
     by_url = f"{_schema_name_from_url(url)}.schema.json"
     by_url_path = RESOURCES / by_url
+    by_tool = f"{tool}.schema.json"
+    by_tool_path = RESOURCES / by_tool
+
+    # If URL-derived file exists, use it (handles aliases and URL-named files)
     if by_url_path.is_file():
         return by_url
-    return f"{tool}.schema.json"
+
+    # Fall back to tool-named file
+    if by_tool_path.is_file():
+        return by_tool
+
+    # Default to URL-derived name if neither exists
+    return by_url
 
 
 def get_schema(tool: str) -> dict[str, Any]:
@@ -85,11 +122,15 @@ get_schema.priority = -2  # type: ignore[attr-defined]
 def get_multi_schema() -> dict[str, Any]:
     tools = get_tools()
     extras = get_extra()
+    canonical_map = _url_to_canonical_tool()
 
+    # De-duplicate tools by URL to handle aliases (e.g., dfc and docstring-format-checker)
+    # Only include the canonical tool for each URL
     return {
         "tools": {
             tool: _load_schema(_tool_schema_filename(tool, url))
             for tool, url in tools.items()
+            if canonical_map.get(url.partition("#")[0]) == tool
         },
         "schemas": [
             _load_schema(f"{_schema_name_from_url(url)}.schema.json")

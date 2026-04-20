@@ -83,6 +83,9 @@ async def main() -> None:
         changed |= write_if_changed(tool_json, tool_table)
         nested = {}
 
+        # Track which URLs we've already downloaded to handle aliases (multiple tools -> same URL)
+        url_to_filename: dict[str, str] = {}
+
         async with asyncio.TaskGroup() as tg:
             results = {
                 tool: tg.create_task(get_url(session, ref.partition("#")[0]))
@@ -104,9 +107,19 @@ async def main() -> None:
                 )
             }
             ref_name = schema_name_from_url(ref)
-            target_name = (
-                ref_name if tool in nested_names and ref_name != tool else tool
-            )
+
+            # Check if we've already downloaded this URL (alias handling)
+            canonical_url = ref.partition("#")[0]
+            if canonical_url in url_to_filename:
+                # This is an alias, filename was already determined
+                target_name = url_to_filename[canonical_url]
+            else:
+                # Determine filename: prefer URL-based name if tool name differs (for aliases)
+                target_name = (
+                    ref_name if tool in nested_names and ref_name != tool else tool
+                )
+                url_to_filename[canonical_url] = target_name
+
             target = RESOURCES / f"{target_name}.schema.json"
 
             for url in iter_schema_refs(result):
@@ -116,7 +129,7 @@ async def main() -> None:
                         "https://www.schemastore.org/",
                     )
                 ):
-                    if url.partition("#")[0] == ref.partition("#")[0]:
+                    if url.partition("#")[0] == canonical_url:
                         continue
                     filename = schema_name_from_url(url)
                     nested_target = RESOURCES / f"{filename}.schema.json"
@@ -132,9 +145,23 @@ async def main() -> None:
         if changed:
             pyproject = DIR.parent / "pyproject.toml"
             doc = tomlkit.parse(pyproject.read_text())
+
+            # De-duplicate aliases (multiple tools -> same URL) for entry points
+            # Only register the canonical tool (first in alphabetical order) for each URL
+            url_to_tools: dict[str, list[str]] = {}
+            for tool, ref in tool_table.items():
+                canonical_url = ref.partition("#")[0]
+                if canonical_url not in url_to_tools:
+                    url_to_tools[canonical_url] = []
+                url_to_tools[canonical_url].append(tool)
+
+            canonical_tools = {
+                sorted(tools)[0] for tools in url_to_tools.values()
+            }
+
             table = tomlkit.table()
             for tool in tool_table:
-                if tool not in {"setuptools", "distutils"}:
+                if tool not in {"setuptools", "distutils"} and tool in canonical_tools:
                     table.add(tool, "validate_pyproject_schema_store.schema:get_schema")
             doc["project"]["entry-points"]["validate_pyproject.tool_schema"] = table  # type: ignore[index]
             doc["project"]["version"] = f"{datetime.date.today():%Y.%m.%d}"  # type: ignore[index]
