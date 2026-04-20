@@ -48,8 +48,7 @@ def _url_to_canonical_tool() -> dict[str, str]:
 
     # Pick the first tool name in alphabetical order
     return {
-        url: sorted(tools_for_url)[0]
-        for url, tools_for_url in url_to_tools.items()
+        url: sorted(tools_for_url)[0] for url, tools_for_url in url_to_tools.items()
     }
 
 

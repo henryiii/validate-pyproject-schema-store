@@ -155,9 +155,7 @@ async def main() -> None:
                     url_to_tools[canonical_url] = []
                 url_to_tools[canonical_url].append(tool)
 
-            canonical_tools = {
-                sorted(tools)[0] for tools in url_to_tools.values()
-            }
+            canonical_tools = {sorted(tools)[0] for tools in url_to_tools.values()}
 
             table = tomlkit.table()
             for tool in tool_table:
