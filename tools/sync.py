@@ -114,9 +114,15 @@ async def main() -> None:
                 # This is an alias, filename was already determined
                 target_name = url_to_filename[canonical_url]
             else:
-                # Determine filename: prefer URL-based name if tool name differs (for aliases)
+                # Determine filename: prefer URL-based name when the file already
+                # exists (e.g. previously created as a nested schema) or when the
+                # tool name appears in the schema's own nested refs.
+                url_named_path = RESOURCES / f"{ref_name}.schema.json"
                 target_name = (
-                    ref_name if tool in nested_names and ref_name != tool else tool
+                    ref_name
+                    if ref_name != tool
+                    and (url_named_path.is_file() or tool in nested_names)
+                    else tool
                 )
                 url_to_filename[canonical_url] = target_name
 
