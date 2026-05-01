@@ -12,7 +12,7 @@ import datetime
 import json
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import urljoin, urlparse
 
 import aiohttp
 import tomlkit
@@ -21,11 +21,43 @@ DIR = Path(__file__).parent.resolve()
 RESOURCES = DIR.parent / "src/validate_pyproject_schema_store/resources"
 RESOURCES.mkdir(parents=True, exist_ok=True)
 
+PYPROJECT_URL = "https://json.schemastore.org/pyproject.json"
 
-async def get_url(session: aiohttp.ClientSession, url: str) -> dict[str, Any]:
+
+def resolve_ref(ref: str, base: str) -> str:
+    """Resolve a potentially relative $ref against a base URL."""
+    if ref.startswith(("http://", "https://", "#")):
+        return ref
+    return urljoin(base, ref)
+
+
+def resolve_schema_refs(obj: Any, base_url: str) -> Any:
+    """Recursively resolve all relative $ref URLs in a schema object to absolute URLs."""
+    if isinstance(obj, dict):
+        new = {}
+        for k, v in obj.items():
+            if k == "$ref" and isinstance(v, str):
+                new[k] = resolve_ref(v, base_url)
+            else:
+                new[k] = resolve_schema_refs(v, base_url)
+        return new
+    if isinstance(obj, list):
+        return [resolve_schema_refs(item, base_url) for item in obj]
+    return obj
+
+
+async def get_url(
+    session: aiohttp.ClientSession,
+    url: str,
+    resolve_refs: bool = False,
+    base_url: str = "",
+) -> dict[str, Any]:
     print("Getting", url)
     async with session.get(url) as resp:
-        return await resp.json()  # type: ignore[no-any-return]
+        data = await resp.json()
+        if resolve_refs:
+            data = resolve_schema_refs(data, base_url or url)
+        return data  # type: ignore[no-any-return]
 
 
 def schema_name_from_url(url: str) -> str:
@@ -77,28 +109,41 @@ async def main() -> None:
         res_json = await get_url(session, "https://json.schemastore.org/pyproject.json")
 
         tool_properties = await get_tool(session, res_json["properties"]["tool"])
-        tool_table = {t: d["$ref"] for t, d in tool_properties.items() if "$ref" in d}
+        tool_table = {
+            t: resolve_ref(d["$ref"], PYPROJECT_URL)
+            for t, d in tool_properties.items()
+            if "$ref" in d
+        }
 
         tool_json = RESOURCES / "tool.json"
         changed |= write_if_changed(tool_json, tool_table)
         nested = {}
 
-        # Track which URLs we've already downloaded to handle aliases (multiple tools -> same URL)
+        # Track which URLs we've already downloaded to handle aliases
         url_to_filename: dict[str, str] = {}
 
         async with asyncio.TaskGroup() as tg:
             results = {
-                tool: tg.create_task(get_url(session, ref.partition("#")[0]))
+                tool: tg.create_task(
+                    get_url(
+                        session,
+                        ref.partition("#")[0],
+                        resolve_refs=True,
+                        base_url=PYPROJECT_URL,
+                    )
+                )
                 for tool, ref in tool_table.items()
             }
 
         for tool, future in results.items():
             ref = tool_table[tool]
             result = future.result()
+            base_url = ref.partition("#")[0]
 
             nested_names = {
                 schema_name_from_url(url)
-                for url in iter_schema_refs(result)
+                for raw_url in iter_schema_refs(result)
+                for url in [resolve_ref(raw_url, base_url)]
                 if url.startswith(
                     (
                         "https://json.schemastore.org/",
@@ -128,7 +173,8 @@ async def main() -> None:
 
             target = RESOURCES / f"{target_name}.schema.json"
 
-            for url in iter_schema_refs(result):
+            for raw_url in iter_schema_refs(result):
+                url = resolve_ref(raw_url, base_url)
                 if url.startswith(
                     (
                         "https://json.schemastore.org/",
@@ -139,7 +185,9 @@ async def main() -> None:
                         continue
                     filename = schema_name_from_url(url)
                     nested_target = RESOURCES / f"{filename}.schema.json"
-                    nested_result = await get_url(session, url)
+                    nested_result = await get_url(
+                        session, url, resolve_refs=True, base_url=PYPROJECT_URL
+                    )
                     changed |= write_if_changed(nested_target, nested_result)
                     nested[filename] = url
 
