@@ -3005,6 +3005,15 @@
           ],
           "format": "uint",
           "minimum": 0
+        },
+        "max-statements-in-try": {
+          "description": "Maximum number of statements allowed for a try clause body (see `W0717`).",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint",
+          "minimum": 0
         }
       },
       "additionalProperties": false
@@ -3127,6 +3136,7 @@
         "AIR2",
         "AIR20",
         "AIR201",
+        "AIR202",
         "AIR3",
         "AIR30",
         "AIR301",
@@ -3977,6 +3987,7 @@
         "PLW07",
         "PLW071",
         "PLW0711",
+        "PLW0717",
         "PLW1",
         "PLW15",
         "PLW150",
@@ -4244,6 +4255,8 @@
         "RUF071",
         "RUF072",
         "RUF073",
+        "RUF074",
+        "RUF075",
         "RUF1",
         "RUF10",
         "RUF100",
