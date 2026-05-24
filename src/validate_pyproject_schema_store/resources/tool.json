@@ -23,5 +23,6 @@
   "tox": "https://json.schemastore.org/tox.json",
   "uv": "https://json.schemastore.org/uv.json",
   "dfc": "https://json.schemastore.org/partial-dfc.json",
-  "docstring-format-checker": "https://json.schemastore.org/partial-dfc.json"
+  "docstring-format-checker": "https://json.schemastore.org/partial-dfc.json",
+  "quikrun": "https://www.schemastore.org/quikrun.json"
 }

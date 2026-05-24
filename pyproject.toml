@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2026.05.22"
+version = "2026.05.24"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
@@ -81,6 +81,7 @@ tombi = "validate_pyproject_schema_store.schema:get_schema"
 tox = "validate_pyproject_schema_store.schema:get_schema"
 uv = "validate_pyproject_schema_store.schema:get_schema"
 dfc = "validate_pyproject_schema_store.schema:get_schema"
+quikrun = "validate_pyproject_schema_store.schema:get_schema"
 
 [project.entry-points."validate_pyproject.multi_schema"]
 validate-pyproject-schema-store = "validate_pyproject_schema_store.schema:get_multi_schema"
