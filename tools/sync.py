@@ -215,8 +215,8 @@ async def main() -> None:
             for tool in tool_table:
                 if tool not in {"setuptools", "distutils"} and tool in canonical_tools:
                     table.add(tool, "validate_pyproject_schema_store.schema:get_schema")
-            doc["project"]["entry-points"]["validate_pyproject.tool_schema"] = table  # type: ignore[index]
-            doc["project"]["version"] = f"{datetime.date.today():%Y.%m.%d}"  # type: ignore[index]
+            doc["project"]["entry-points"]["validate_pyproject.tool_schema"] = table
+            doc["project"]["version"] = f"{datetime.date.today():%Y.%m.%d}"
             pyproject.write_text(tomlkit.dumps(doc))
 
 
