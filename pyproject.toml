@@ -29,6 +29,7 @@ classifiers = [
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
+dependencies = ["fastjsonschema!=2.22.0; python_version<'3.10'"]
 
 [project.optional-dependencies]
 validate-pyproject = [
