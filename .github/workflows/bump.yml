@@ -8,28 +8,34 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   bump:
     name: Bump rendered version if changed
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write # push the branch for the bump PR
+      pull-requests: write # open and auto-merge the bump PR
     steps:
-      - uses: actions/create-github-app-token@v3
+      - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: generate-token
         with:
           client-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v9.0.0
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
 
       - name: Run bump script
         run: |
@@ -49,7 +55,7 @@ jobs:
           with open(os.environ["GITHUB_OUTPUT"], "w", encoding="utf-8") as f:
               print(f"version={pyproject['project']['version']}", file=f)
 
-      - uses: peter-evans/create-pull-request@v8
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         id: create-pr
         with:
           title: |
@@ -69,8 +75,7 @@ jobs:
         id: check-commits
         if: steps.create-pr.outputs.pull-request-number
         run: |
-          pr_number=${{ steps.create-pr.outputs.pull-request-number }}
-          commits=$(gh api repos/${{ github.repository }}/pulls/$pr_number/commits --jq '[.[].author.login? // "unknown"]')
+          commits=$(gh api "repos/$REPO/pulls/$PR_NUMBER/commits" --jq '[.[].author.login? // "unknown"]')
           unique_authors=$(echo "$commits" | jq -c 'unique')
           echo "authors=$unique_authors" >> "$GITHUB_OUTPUT"
           if [[ "$unique_authors" == '["pyproject-schema-store-bot[bot]"]' ]]; then
@@ -81,12 +86,15 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.token }}
+          PR_NUMBER: ${{ steps.create-pr.outputs.pull-request-number }}
+          REPO: ${{ github.repository }}
 
       - name: Enable pull request auto-merge
         if:
           steps.create-pr.outputs.pull-request-number &&
           steps.check-commits.outputs.only-bot == 'true'
         run: |
-          gh pr merge --squash --auto --delete-branch ${{ steps.create-pr.outputs.pull-request-number }}
+          gh pr merge --squash --auto --delete-branch "$PR_NUMBER"
         env:
           GH_TOKEN: ${{ secrets.token }}
+          PR_NUMBER: ${{ steps.create-pr.outputs.pull-request-number }}
