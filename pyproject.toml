@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.26"]
 build-backend = "hatchling.build"
 
 
@@ -11,11 +11,12 @@ authors = [
 ]
 description = "A plugin set for validate-pyproject and schema-store."
 readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 4 - Beta",
   "Intended Audience :: Developers",
-  "License :: OSI Approved :: Apache Software License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
@@ -95,16 +96,12 @@ exclude-newer = "7 days"
 
 [tool.hatch.envs.default]
 installer = "uv"
+dependency-groups = ["dev"]
 
 [tool.hatch.envs.hatch-test]
-# Duplicated waiting for dependency-group support
-dependencies = [
-  "pytest >=6",
-  "pytest-cov >=3",
-  "validate-pyproject >=0.24.1",
-  "tomli; python_version<'3.11'",
-  "packaging",
-]
+dependency-groups = ["test"]
+# Overrides hatch's defaults, whose coverage pin needs Python 3.10
+dependencies = ["coverage[toml]"]
 
 [tool.hatch.envs.lint]
 dependencies = ["pre-commit"]
@@ -133,7 +130,7 @@ testpaths = [
 
 [tool.coverage]
 run.source = ["validate_pyproject_schema_store"]
-port.exclude_lines = [
+report.exclude_also = [
   'pragma: no cover',
   '\.\.\.',
   'if typing.TYPE_CHECKING:',
@@ -206,4 +203,5 @@ messages_control.disable = [
 ]
 
 [tool.repo-review]
-ignore = ["RTD", "PY004", "PC170"]
+# PC111: ruff-format handles docs code blocks; drop after the next cookie release
+ignore = ["RTD", "PY004", "PC170", "PC111"]
