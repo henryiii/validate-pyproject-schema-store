@@ -209,14 +209,16 @@ async def main() -> None:
                     url_to_tools[canonical_url] = []
                 url_to_tools[canonical_url].append(tool)
 
-            canonical_tools = {sorted(tools)[0] for tools in url_to_tools.values()}
+            canonical_tools = {min(tools) for tools in url_to_tools.values()}
 
             table = tomlkit.table()
             for tool in tool_table:
                 if tool not in {"setuptools", "distutils"} and tool in canonical_tools:
                     table.add(tool, "validate_pyproject_schema_store.schema:get_schema")
             doc["project"]["entry-points"]["validate_pyproject.tool_schema"] = table
-            doc["project"]["version"] = f"{datetime.date.today():%Y.%m.%d}"
+            doc["project"]["version"] = (
+                f"{datetime.datetime.now(tz=datetime.timezone.utc):%Y.%m.%d}"
+            )
             pyproject.write_text(tomlkit.dumps(doc))
 
 
