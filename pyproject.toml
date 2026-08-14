@@ -100,6 +100,8 @@ dependency-groups = ["dev"]
 
 [tool.hatch.envs.hatch-test]
 dependency-groups = ["test"]
+# Overrides hatch's defaults, whose coverage pin needs Python 3.10
+dependencies = ["coverage[toml]"]
 
 [tool.hatch.envs.lint]
 dependencies = ["pre-commit"]
