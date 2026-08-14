@@ -19,6 +19,7 @@ def __dir__() -> list[str]:
 
 @functools.lru_cache
 def get_tools() -> dict[str, str]:
+    """Return a mapping from tool name to schema URL."""
     tool_file = RESOURCES / "tool.json"
     with tool_file.open(encoding="utf-8") as f:
         return json.load(f)  # type: ignore[no-any-return]
@@ -26,6 +27,7 @@ def get_tools() -> dict[str, str]:
 
 @functools.lru_cache
 def get_extra() -> dict[str, str]:
+    """Return a mapping from extra (non-tool) table name to schema URL."""
     extra_file = RESOURCES / "extra.json"
     with extra_file.open(encoding="utf-8") as f:
         return json.load(f)  # type: ignore[no-any-return]
@@ -86,6 +88,7 @@ def _tool_schema_filename(tool: str, url: str) -> str:
 
 
 def get_schema(tool: str) -> dict[str, Any]:
+    """Return the schema for a single tool table."""
     tools = get_tools()
     if tool not in tools:
         msg = f"Must be valid tool, got {tool}"
@@ -117,6 +120,7 @@ get_schema.priority = -2  # type: ignore[attr-defined]
 
 
 def get_multi_schema() -> dict[str, Any]:
+    """Return a combined schema with all tool and extra tables."""
     tools = get_tools()
     extras = get_extra()
     canonical_map = _url_to_canonical_tool()
