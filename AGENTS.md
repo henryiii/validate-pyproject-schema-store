@@ -11,13 +11,13 @@ points.
 
 ## Commands
 
-| Task                          | Command                                    |
-| ----------------------------- | ------------------------------------------ |
-| Run all tests (with coverage) | `hatch test -ca`                           |
-| Run a single test file        | `hatch test tests/test_package.py`         |
-| Lint / format / typecheck     | `hatch run lint:lint` (runs pre-commit)    |
-| Pylint only                   | `hatch run pylint:lint`                    |
-| Sync schemas from SchemaStore | `uv run tools/sync.py`                     |
+| Task                          | Command                                 |
+| ----------------------------- | --------------------------------------- |
+| Run all tests (with coverage) | `hatch test -ca`                        |
+| Run a single test file        | `hatch test tests/test_package.py`      |
+| Lint / format / typecheck     | `hatch run lint:lint` (runs pre-commit) |
+| Pylint only                   | `hatch run pylint:lint`                 |
+| Sync schemas from SchemaStore | `uv run tools/sync.py`                  |
 
 Build backend is `hatchling`; `hatch` is the task runner (default env installer
 is `uv`). Python 3.9–3.14 are supported. CI runs `uvx hatch test -ca`.
@@ -38,17 +38,16 @@ If schema handling needs to change, edit `tools/sync.py`, then run
 The primary maintenance script — a PEP 723 self-contained uv script (needs
 Python ≥3.11). It:
 
-1. Fetches `https://json.schemastore.org/pyproject.json` and downloads each
-   tool schema, plus any nested `schemastore.org` refs, into `resources/`
+1. Fetches `https://json.schemastore.org/pyproject.json` and downloads each tool
+   schema, plus any nested `schemastore.org` refs, into `resources/`
 2. Resolves relative `$ref`s to absolute URLs and replaces `"uint64"` with
    `"uint"` (workaround for `validate-pyproject`)
 3. Handles aliases (multiple tool names → same URL): each URL is downloaded
    once, stored under a URL-derived filename when needed, and only the first
    alphabetical tool name gets an entry point
 4. If anything changed, updates `pyproject.toml`: `project.version` → today's
-   date (`YYYY.MM.DD`) and regenerates the
-   `validate_pyproject.tool_schema` entry points, excluding `setuptools` and
-   `distutils`
+   date (`YYYY.MM.DD`) and regenerates the `validate_pyproject.tool_schema`
+   entry points, excluding `setuptools` and `distutils`
 
 Never bump the version manually; `sync.py` does it.
 
@@ -56,8 +55,8 @@ Never bump the version manually; `sync.py` does it.
 
 Defined in `pyproject.toml`:
 
-- `[project.entry-points."validate_pyproject.tool_schema"]` — one per tool,
-  all pointing at `schema:get_schema`
+- `[project.entry-points."validate_pyproject.tool_schema"]` — one per tool, all
+  pointing at `schema:get_schema`
 - `[project.entry-points."validate_pyproject.multi_schema"]` — single entry,
   `schema:get_multi_schema`
 - `[project.entry-points."pipx.run"]` — makes
@@ -77,8 +76,8 @@ Defined in `pyproject.toml`:
 
 ## Testing quirks
 
-- `tests/test_validate_pyproject.py` imports `validate_pyproject` and tests
-  real validation behavior against the bundled schemas.
+- `tests/test_validate_pyproject.py` imports `validate_pyproject` and tests real
+  validation behavior against the bundled schemas.
 - `tests/conftest.py` reports installed package versions in the pytest header.
 
 ## Release flow (automated)
@@ -92,8 +91,8 @@ Defined in `pyproject.toml`:
 
 ## Conventions
 
-- `from __future__ import annotations` is required in all Python files
-  (enforced by ruff's isort rules).
+- `from __future__ import annotations` is required in all Python files (enforced
+  by ruff's isort rules).
 - Ruff (full `ALL` ruleset) handles linting and formatting; Prettier covers
   everything else but excludes `resources/*.json`.
 - Mypy is strict; `disallow_untyped_defs` applies only to
