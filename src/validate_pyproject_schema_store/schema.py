@@ -1,3 +1,5 @@
+"""Entry points that supply schema-store schemas to validate-pyproject."""
+
 from __future__ import annotations
 
 import functools
