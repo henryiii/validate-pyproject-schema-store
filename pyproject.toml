@@ -27,6 +27,7 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Software Development :: Quality Assurance",
   "Typing :: Typed",
 ]
@@ -113,7 +114,7 @@ dependencies = ["pylint"]
 scripts.lint = "pylint validate_pyproject_schema_store {args}"
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
+python = ["3.15", "3.14", "3.13", "3.12", "3.11", "3.10", "3.9"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
