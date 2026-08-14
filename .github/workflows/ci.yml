@@ -17,6 +17,20 @@ env:
 permissions: {}
 
 jobs:
+  pylint:
+    name: PyLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
+
+      - name: Run PyLint
+        run: uvx hatch run pylint:lint -- --output-format=github
+
   checks:
     name: Check on ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
@@ -51,7 +65,7 @@ jobs:
   pass:
     name: Pass
     if: always()
-    needs: [checks]
+    needs: [pylint, checks]
     runs-on: ubuntu-slim
     timeout-minutes: 2
     steps:
