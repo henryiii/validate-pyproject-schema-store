@@ -5,6 +5,8 @@
 # ///
 
 
+"""Download the schema-store schemas and refresh the bundled resources."""
+
 from __future__ import annotations
 
 import asyncio
@@ -49,9 +51,11 @@ def resolve_schema_refs(obj: Any, base_url: str) -> Any:
 async def get_url(
     session: aiohttp.ClientSession,
     url: str,
+    *,
     resolve_refs: bool = False,
     base_url: str = "",
 ) -> dict[str, Any]:
+    """Download a JSON document, optionally making its $refs absolute."""
     print("Getting", url)
     async with session.get(url) as resp:
         data = await resp.json()
@@ -61,11 +65,13 @@ async def get_url(
 
 
 def schema_name_from_url(url: str) -> str:
+    """Return the schema file stem from a schema URL."""
     parsed = urlparse(url.partition("#")[0])
     return Path(parsed.path).name.removesuffix(".json")
 
 
 def iter_schema_refs(value: Any) -> set[str]:
+    """Collect every $ref string in a schema object."""
     refs: set[str] = set()
     if isinstance(value, dict):
         ref = value.get("$ref")
@@ -80,6 +86,7 @@ def iter_schema_refs(value: Any) -> set[str]:
 
 
 def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
+    """Write the JSON file if the contents differ; report if it changed."""
     new = json.dumps(contents, indent=2) + "\n"
     new = new.replace(
         '"uint64"', '"uint"'
@@ -94,6 +101,7 @@ def write_if_changed(filename: Path, contents: dict[str, Any]) -> bool:
 async def get_tool(
     session: aiohttp.ClientSession, tools: dict[str, Any]
 ) -> dict[str, Any]:
+    """Return the tool table properties, following a $ref if needed."""
     try:
         return tools["properties"]  # type: ignore[no-any-return]
     except KeyError:
@@ -103,6 +111,7 @@ async def get_tool(
 
 
 async def main() -> None:
+    """Refresh the bundled schemas, entry points, and version."""
     changed = False
 
     async with aiohttp.ClientSession() as session:

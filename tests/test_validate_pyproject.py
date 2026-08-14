@@ -12,7 +12,7 @@ else:
     import tomllib
 
 
-def test_vpp_loads(caplog):
+def test_vpp_loads(caplog: pytest.LogCaptureFixture) -> None:
     pyproject_as_dict = tomllib.loads("""
         [tool.ruff]
         src = ["src"]
@@ -26,7 +26,7 @@ def test_vpp_loads(caplog):
     )
 
 
-def test__loads(caplog):
+def test__loads(caplog: pytest.LogCaptureFixture) -> None:
     pyproject_as_dict = tomllib.loads("""
         [tool.hatch.env]
         requires = [
@@ -42,7 +42,7 @@ def test__loads(caplog):
     )
 
 
-def test_version_24_multi():
+def test_version_24_multi() -> None:
     pyproject_as_dict = tomllib.loads("""
         [tool.pdm]
         dockerize.anything = "invalid"

@@ -152,41 +152,23 @@ disallow_untyped_defs = true
 disallow_incomplete_defs = true
 
 
-[tool.ruff.lint]
-extend-select = [
-  "B",           # flake8-bugbear
-  "I",           # isort
-  "ARG",         # flake8-unused-arguments
-  "C4",          # flake8-comprehensions
-  "EM",          # flake8-errmsg
-  "ISC",
-  "ICN",         # flake8-import-conventions
-  "G",           # flake8-logging-format
-  "PGH",         # pygrep-hooks
-  "PIE",         # flake8-pie
-  "PL",          # pylint
-  "PT",          # flake8-pytest-style
-  "PTH",         # flake8-use-pathlib
-  "RET",         # flake8-return
-  "RUF",         # Ruff-specific
-  "SIM",         # flake8-simplify
-  "T20",         # flake8-print
-  "UP",          # pyupgrade
-  "YTT",         # flake8-2020
-  "EXE",         # flake8-executable
-  "NPY",         # NumPy specific rules
-  "PD",          # pandas-vet
+[tool.ruff]
+show-fixes = true
+lint.select = ["ALL"]
+lint.ignore = [
+  "ANN401",  # Disallow Any
+  "COM812",  # Trailing commas teach the formatter
+  "CPY001",  # Missing copyright notice
+  "E501",    # Line too long, the formatter handles what it can
+  "PLR09",   # Too many ...
+  "S101",    # Assert is used by mypy and pytest
 ]
-ignore = [
-  "PLR",    # Design related pylint codes
-  "ISC001", # Conflicts with formatter
-  "EXE003", # Doesn't support uv
-]
-isort.required-imports = ["from __future__ import annotations"]
+lint.isort.required-imports = ["from __future__ import annotations"]
+lint.pydocstyle.convention = "pep257"
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["T20"]
-"tools/**" = ["T20"]
+"tests/**" = ["D1", "INP001", "T20"]
+"tools/**" = ["C901", "T20"]
 
 
 [tool.pylint]
