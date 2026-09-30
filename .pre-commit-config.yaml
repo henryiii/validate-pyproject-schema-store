@@ -56,6 +56,7 @@ repos:
         args: ["-Lcrate"]
         additional_dependencies:
           - tomli; python_version<'3.11'
+        exclude: '^src/validate_pyproject_schema_store/resources/.*\.json'
 
   - repo: https://github.com/shellcheck-py/shellcheck-py
     rev: "a6564f5d57444e123433a5c9af733e3975c77229" # frozen: v0.11.0.1-1
