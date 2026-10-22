@@ -20,7 +20,7 @@ points.
 | Sync schemas from SchemaStore | `uv run tools/sync.py`                  |
 
 Build backend is `hatchling`; `hatch` is the task runner (default env installer
-is `uv`). Python 3.9–3.14 are supported. CI runs `uvx hatch test -ca`.
+is `uv`). Python 3.10–3.14 are supported. CI runs `uvx hatch test -ca`.
 
 ## Generated schemas — do not hand-edit
 
