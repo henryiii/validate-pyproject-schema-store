@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2026.11.05"
+version = "2026.11.06"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
@@ -80,6 +80,7 @@ pdm = "validate_pyproject_schema_store.schema:get_schema"
 pyright = "validate_pyproject_schema_store.schema:get_schema"
 pytest = "validate_pyproject_schema_store.schema:get_schema"
 repo-review = "validate_pyproject_schema_store.schema:get_schema"
+simplint = "validate_pyproject_schema_store.schema:get_schema"
 taskipy = "validate_pyproject_schema_store.schema:get_schema"
 tombi = "validate_pyproject_schema_store.schema:get_schema"
 tox = "validate_pyproject_schema_store.schema:get_schema"
