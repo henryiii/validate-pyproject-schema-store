@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "validate-pyproject-schema-store"
-version = "2026.11.07"
+version = "2026.11.10"
 authors = [
   { name = "Henry Schreiner", email = "henryfs@princeton.edu" },
 ]
@@ -64,6 +64,7 @@ black = "validate_pyproject_schema_store.schema:get_schema"
 cibuildwheel = "validate_pyproject_schema_store.schema:get_schema"
 fastapi = "validate_pyproject_schema_store.schema:get_schema"
 scheduled = "validate_pyproject_schema_store.schema:get_schema"
+workers = "validate_pyproject_schema_store.schema:get_schema"
 inwards = "validate_pyproject_schema_store.schema:get_schema"
 mypy = "validate_pyproject_schema_store.schema:get_schema"
 ruff = "validate_pyproject_schema_store.schema:get_schema"
