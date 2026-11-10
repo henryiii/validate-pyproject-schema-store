@@ -3,6 +3,7 @@
   "cibuildwheel": "https://json.schemastore.org/partial-cibuildwheel.json",
   "fastapi": "https://json.schemastore.org/partial-fastapi.json",
   "scheduled": "https://json.schemastore.org/partial-scheduled.json",
+  "workers": "https://json.schemastore.org/partial-workers.json",
   "inwards": "https://json.schemastore.org/partial-inwards.json",
   "mypy": "https://json.schemastore.org/partial-mypy.json",
   "ruff": "https://json.schemastore.org/ruff.json",
