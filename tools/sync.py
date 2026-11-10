@@ -10,7 +10,7 @@
 from __future__ import annotations
 
 import asyncio
-import datetime
+import datetime as dt
 import json
 from pathlib import Path
 from typing import Any
@@ -226,7 +226,7 @@ async def main() -> None:
                     table.add(tool, "validate_pyproject_schema_store.schema:get_schema")
             doc["project"]["entry-points"]["validate_pyproject.tool_schema"] = table
             doc["project"]["version"] = (
-                f"{datetime.datetime.now(tz=datetime.timezone.utc):%Y.%m.%d}"
+                f"{dt.datetime.now(tz=dt.timezone.utc):%Y.%m.%d}"
             )
             pyproject.write_text(tomlkit.dumps(doc))
 
